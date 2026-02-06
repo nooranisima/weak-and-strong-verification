@@ -1,0 +1,9 @@
+openai>=1.0.0
+numpy
+datasets
+torch
+transformers
+bitsandbytes
+pyyaml
+matplotlib
+seaborn

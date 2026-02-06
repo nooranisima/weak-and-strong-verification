@@ -1,0 +1,20 @@
+# Results and data (large files)
+#results/
+#*.json
+#*.pkl
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS
+.DS_Store

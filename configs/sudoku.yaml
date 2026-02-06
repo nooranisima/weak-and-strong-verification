@@ -1,0 +1,50 @@
+# Sudoku experiment configuration
+# ================================
+
+# API provider: "openai" or "deepseek"
+provider: "deepseek"
+
+# Models
+generator_model: "deepseek-chat"
+weak_verifier_model: "deepseek-chat"
+
+# Dataset
+num_problems: 500
+dataset_url: "https://huggingface.co/datasets/asadshahab/mini-sudoku"
+
+# Generation parameters
+temperature: 0.7
+max_tokens: 2000
+
+# Tree generation
+tree_depth: 3          # n: steps per puzzle
+branching_factor: 3    # m: candidates per step
+puzzle_parallelism: 3
+node_parallelism: 8
+checkpoint_every: 10
+
+# Experiment settings
+noise_scale: 0.1
+n_runs: 3
+max_attempts_per_step: 5
+grid_search_mode: "coarse_to_fine"  # "fast", "coarse_to_fine", or "full"
+
+# Alpha/beta combinations (symmetric)
+alpha_beta_combinations:
+  - [0.001, 0.001]
+  - [0.005, 0.005]
+  - [0.01, 0.01]
+  - [0.03, 0.03]
+  - [0.05, 0.05]
+  - [0.07, 0.07]
+  - [0.10, 0.10]
+  - [0.15, 0.15]
+  - [0.20, 0.20]
+  - [0.30, 0.30]
+
+# Weak baseline Best-of-N values
+weak_baseline_n_values: [1, 2, 3]
+
+# Sweep experiments (for appendix)
+sweep_values: [0.001, 0.005, 0.01, 0.03, 0.05, 0.07, 0.10, 0.15, 0.2, 0.3]
+fixed_values: [0.01, 0.05, 0.1, 0.2]
