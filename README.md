@@ -1,4 +1,4 @@
-# Adaptive Verification: Best-of-N with Weak and Strong Verifiers
+# Weak and Strong Verification
 
 This repository implements the **SSV** algorithm.
 
