@@ -1,6 +1,6 @@
 # Adaptive Verification: Best-of-N with Weak and Strong Verifiers
 
-This repository implements the **SSV (Selective Strong Verification)** algorithm, which adaptively decides when to invoke an expensive strong verifier versus relying on a cheap weak verifier. The approach learns accept/reject thresholds online to guarantee user-specified error rates (α for false accepts, β for false rejects) while minimizing strong verifier calls.
+This repository implements the **SSV** algorithm.
 
 Experiments are run on two domains: **MATH** (mathematical reasoning) and **Sudoku** (constraint satisfaction).
 
@@ -80,7 +80,7 @@ Each domain follows the same two-step pattern:
 
 ### Step 1: Pre-generate Data
 
-Pre-generation queries LLMs to produce candidate solutions with weak scores and ground truth labels. This is the expensive step (API calls). Results are saved to `results/` so experiments can be re-run without re-querying.
+Pre-generation queries LLMs to produce candidate solutions with weak scores and ground truth labels. Results are saved to `results/`.
 
 **MATH:**
 ```bash
@@ -96,56 +96,7 @@ Pre-generation queries LLMs to produce candidate solutions with weak scores and 
 
 ### Step 2: Run Experiments
 
-Experiments run entirely on pre-generated data (no API calls). They perform grid search over hyperparameters, run the adaptive algorithm and baselines, and produce all paper figures.
-
-**MATH** (`notebooks/math_experiment.ipynb`):
-1. Weak verifier quality analysis (score distributions, calibration)
-2. Error convergence plots (running accept/reject error rates)
-3. Main pipeline: symmetric α=β sweep → accuracy vs latency
-4. Appendix: fixed-α sweeps (varying β) and fixed-β sweeps (varying α)
-5. Multi-sweep overlay plots
-
-**Sudoku** (`notebooks/sudoku_experiment.ipynb`):
-1. Error convergence experiment
-2. Main pipeline: symmetric α=β sweep → accuracy vs latency
-3. Appendix: fixed-α and fixed-β sweeps
-4. Multi-sweep overlay plots
-5. Reload & re-plot section (for rebuttals)
-
-## Key Components
-
-### Algorithms (`src/algorithms/`)
-
-| Class | Description |
-|-------|-------------|
-| `SimulatedAdaptiveRunner` | Adaptive threshold algorithm with clamping |
-| `SimulatedAdaptiveRunnerWithRNG` | Same but with explicit RNG, no clamping (matches theory) |
-| `SimulatedStrongBaseline` | Always queries the strong verifier |
-| `SimulatedWeakBaseline` | Uses only weak scores with a fixed threshold |
-| `SimulatedWeakBaselineBestOfN` | Picks the attempt with the highest weak score |
-
-### MATH Experiments (`src/math_experiments/`)
-
-| Module | Key Functions |
-|--------|---------------|
-| `simulation.py` | `run_with_error_tracking()`, `plot_error_convergence()` |
-| `pipeline.py` | `grid_search_for_config()`, `run_full_pipeline()`, `plot_accuracy_vs_latency()` |
-| `sweep_plots.py` | `plot_accuracy_vs_latency_multi_alpha()`, `plot_accuracy_vs_latency_multi_beta()` |
-| `analysis.py` | `plot_score_distribution()`, `plot_calibration()`, `print_weak_verifier_summary()` |
-| `io.py` | `save_pipeline_results()`, `load_pipeline_results()` |
-
-### Sudoku Experiments (`src/sudoku_experiments/`)
-
-| Module | Key Functions |
-|--------|---------------|
-| `simulation.py` | `SudokuAdaptiveRunner`, `run_experiment()`, `plot_all_error_rates()` |
-| `pipeline.py` | `run_full_pipeline_sudoku()`, `plot_accuracy_vs_latency_sudoku()`, `save_results()` |
-| `sweep_plots.py` | `plot_accuracy_vs_latency_multi_alpha_sudoku()`, `plot_sweep_results()` |
+Experiments run entirely on pre-generated data (no API calls). They run the SSV algorithm and baselines, and produce all paper figures.
 
 ## Reproducibility
-
-All experiments use explicit RNG seeding for reproducibility:
-- MATH: `seed * 100 + difficulty` per difficulty, `seed * 1000 + difficulty * 100 + run_idx` per run
-- Sudoku: Configurable seed passed through grid search and pipeline
-
 Pre-generated data files contain all information needed to reproduce results without API calls. The reload-and-replot sections in each notebook allow regenerating all figures from saved `.pkl` files.
