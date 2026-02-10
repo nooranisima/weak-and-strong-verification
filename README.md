@@ -2,7 +2,7 @@
 
 This repository implements the **SSV** algorithm.
 
-Experiments are run on two domains: **MATH** (mathematical reasoning) and **Sudoku** (constraint satisfaction).
+Experiments are run on two domains: **MATH** (mathematical reasoning) and **Sudoku**.
 
 ## Repository Structure
 
